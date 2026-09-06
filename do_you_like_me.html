@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ek Chhota Sa Sawaal 💌</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blush-1:#FFE3EA;
+    --blush-2:#FFC7D4;
+    --rose:#D6336C;
+    --rose-deep:#A32255;
+    --ink:#3A1F2B;
+    --cream:#FFF7F5;
+    --gold:#C99A2E;
+    --gold-soft:#FBEFD3;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;
+    padding:0;
+    min-height:100vh;
+    font-family:'Poppins',sans-serif;
+    color:var(--ink);
+    overflow-x:hidden;
+    background:radial-gradient(circle at 20% 15%, var(--blush-2), var(--blush-1) 55%, #FFF3E9 100%);
+  }
+  .stage{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px 18px;
+    position:relative;
+  }
+  .card{
+    position:relative;
+    width:100%;
+    max-width:460px;
+    background:var(--cream);
+    border-radius:28px;
+    padding:40px 32px 36px;
+    box-shadow:0 30px 60px -20px rgba(163,34,85,0.35), 0 0 0 1px rgba(255,255,255,0.6) inset;
+    text-align:center;
+    overflow:hidden;
+  }
+  .card::before{
+    content:"";
+    position:absolute;
+    top:-60px; right:-60px;
+    width:160px; height:160px;
+    background:radial-gradient(circle, rgba(214,51,108,0.18), transparent 70%);
+    border-radius:50%;
+  }
+  h1{
+    font-family:'Playfair Display',serif;
+    font-weight:700;
+    font-size:1.7rem;
+    line-height:1.35;
+    margin:0 0 10px;
+    color:var(--rose-deep);
+  }
+  p.sub{
+    font-size:0.95rem;
+    color:#6b4a58;
+    margin:0 0 28px;
+    line-height:1.6;
+  }
+  .btn-row{
+    display:flex;
+    gap:16px;
+    justify-content:center;
+    position:relative;
+    min-height:64px;
+    align-items:center;
+  }
+  button{
+    font-family:'Poppins',sans-serif;
+    font-size:1rem;
+    font-weight:600;
+    padding:13px 28px;
+    border-radius:999px;
+    border:none;
+    cursor:pointer;
+    transition:transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .yes-btn{
+    background:var(--rose);
+    color:#fff;
+    box-shadow:0 10px 20px -8px rgba(214,51,108,0.6);
+  }
+  .yes-btn:hover{ transform:translateY(-2px) scale(1.03); }
+  .no-btn{
+    background:transparent;
+    color:var(--rose-deep);
+    border:2px solid var(--blush-2);
+    position:relative;
+    left:0; top:0;
+  }
+  .escape-msg{
+    font-size:0.85rem;
+    color:var(--rose-deep);
+    margin-top:16px;
+    min-height:18px;
+    font-weight:500;
+    opacity:0;
+    transition:opacity 0.25s ease;
+  }
+  .escape-msg.show{ opacity:1; }
+
+  .poem{
+    font-family:'Playfair Display',serif;
+    font-style:italic;
+    font-size:1.05rem;
+    line-height:1.85;
+    color:var(--ink);
+    margin:6px 0 26px;
+    white-space:pre-line;
+    text-align:left;
+    padding:20px 22px;
+    background:linear-gradient(180deg, var(--blush-1), #fff);
+    border-radius:16px;
+    border-left:3px solid var(--rose);
+  }
+
+  .divider{
+    height:1px;
+    background:linear-gradient(90deg, transparent, var(--blush-2), transparent);
+    margin:22px 0 24px;
+  }
+
+  .payment-box{
+    background:var(--gold-soft);
+    border-radius:18px;
+    padding:22px 20px;
+    margin-top:8px;
+  }
+  .check{
+    width:56px; height:56px;
+    border-radius:50%;
+    background:var(--rose);
+    color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.8rem;
+    margin:0 auto 12px;
+  }
+  .amount{
+    font-family:'Playfair Display',serif;
+    font-size:1.9rem;
+    font-weight:700;
+    color:var(--rose-deep);
+    margin:4px 0;
+  }
+  .status-line{
+    font-size:0.9rem;
+    color:#7a5a3e;
+    font-weight:500;
+  }
+  .footer-note{
+    margin-top:20px;
+    font-size:0.85rem;
+    color:#6b4a58;
+    line-height:1.6;
+  }
+
+  .scene{ display:none; }
+  .scene.active{ display:block; }
+
+  .floating-hearts{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+    overflow:hidden;
+  }
+  .amb-heart{
+    position:absolute;
+    bottom:-40px;
+    font-size:1.4rem;
+    opacity:0.55;
+    animation:floatUp linear infinite;
+  }
+  @keyframes floatUp{
+    to{ transform:translateY(-115vh) rotate(20deg); opacity:0; }
+  }
+
+  .burst-heart{
+    position:fixed;
+    font-size:1.3rem;
+    pointer-events:none;
+    z-index:50;
+    animation:burstUp 1.1s ease-out forwards;
+  }
+  @keyframes burstUp{
+    0%{ transform:translate(0,0) scale(0.6); opacity:1; }
+    100%{ transform:translate(var(--dx,0px), -160px) scale(1.1); opacity:0; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .amb-heart, .burst-heart{ animation:none; display:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="floating-hearts" id="ambient"></div>
+
+<div class="stage">
+  <div class="card">
+
+    <!-- Scene 1 -->
+    <div class="scene active" id="scene1">
+      <h1>Ek chhota sa sawaal hai tumse... 💗</h1>
+      <p class="sub">Do you like me? Seedha seedha bata do na.</p>
+      <div class="btn-row">
+        <button class="yes-btn" onclick="burst(event); goTo('scene2');">Yes</button>
+        <button class="no-btn" id="noBtn1"
+          onmouseover="dodge(this)" ontouchstart="dodge(this); return false;"
+          onclick="burst(event); flashMsg('msg1');">No</button>
+      </div>
+      <div class="escape-msg" id="msg1">You missed an opportunity 😌 chalo yrr, Yes kr do na 🥺</div>
+    </div>
+
+    <!-- Scene 2 -->
+    <div class="scene" id="scene2">
+      <h1>Sun li tumne apne dil ki 🩷</h1>
+      <div class="poem">Tumhari muskaan dekh ke, mera pulse rate badh jaata hai,
+jaise koi adhoora code, achanak se compile ho jaata hai.
+Dil ka ECG bhi ab sirf ek hi rhythm pehchanta hai,
+aur jab tum paas ho, har purana bug bhi mit jaata hai.
+Stethoscope se sunu ya IDE mein debug karu main,
+tumhare bina adhoora lagta hai har ek function jo likhu main.</div>
+
+      <div class="divider"></div>
+
+      <p class="sub" style="margin-bottom:18px;">Ek aur chhota sa sawaal... kya tum mere sath coffee date pr chalogi? ☕</p>
+      <div class="btn-row">
+        <button class="yes-btn" onclick="burst(event); goTo('scene3');">Yes</button>
+        <button class="no-btn" id="noBtn2"
+          onmouseover="dodge(this)" ontouchstart="dodge(this); return false;"
+          onclick="burst(event); flashMsg('msg2');">No</button>
+      </div>
+      <div class="escape-msg" id="msg2">Nahi bhaag sakti is sawaal se 😄 Yes bol do!</div>
+    </div>
+
+    <!-- Scene 3 -->
+    <div class="scene" id="scene3">
+      <div class="payment-box">
+        <div class="check">✓</div>
+        <div class="status-line">Payment Successful</div>
+        <div class="amount">₹10.00</div>
+        <div class="status-line">transferred to you, buddy 💸</div>
+      </div>
+      <div class="footer-note">Please share screenshot for proof, buddy 😄❤️<br>Coffee date confirmed — ab date fix karte hain!</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function goTo(id){
+  document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function flashMsg(id){
+  const el = document.getElementById(id);
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 1800);
+}
+
+function dodge(btn){
+  const row = btn.parentElement;
+  const maxX = row.clientWidth - btn.offsetWidth - 8;
+  const maxY = row.clientHeight - btn.offsetHeight - 8;
+  const x = Math.random() * Math.max(maxX, 40) - maxX/2;
+  const y = (Math.random() * 24) - 12;
+  btn.style.position = 'relative';
+  btn.style.left = x + 'px';
+  btn.style.top = y + 'px';
+}
+
+function burst(e){
+  const x = e.clientX || (e.touches && e.touches[0].clientX) || window.innerWidth/2;
+  const y = e.clientY || (e.touches && e.touches[0].clientY) || window.innerHeight/2;
+  const emojis = ['💗','💕','❤️','💖','💘'];
+  for(let i=0;i<8;i++){
+    const h = document.createElement('div');
+    h.className = 'burst-heart';
+    h.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    h.style.left = x + 'px';
+    h.style.top = y + 'px';
+    h.style.setProperty('--dx', (Math.random()*160-80) + 'px');
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 1200);
+  }
+}
+
+// ambient floating hearts in background
+const ambientEl = document.getElementById('ambient');
+const ambientEmojis = ['💗','💕','❤️','💖'];
+function spawnAmbient(){
+  const h = document.createElement('div');
+  h.className = 'amb-heart';
+  h.textContent = ambientEmojis[Math.floor(Math.random()*ambientEmojis.length)];
+  h.style.left = Math.random()*100 + 'vw';
+  h.style.animationDuration = (6 + Math.random()*6) + 's';
+  h.style.fontSize = (1 + Math.random()*1.2) + 'rem';
+  ambientEl.appendChild(h);
+  setTimeout(() => h.remove(), 13000);
+}
+setInterval(spawnAmbient, 700);
+spawnAmbient();
+</script>
+
+</body>
+</html>
